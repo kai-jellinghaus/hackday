@@ -1,0 +1,186 @@
+openapi: "3.0.3"
+info:
+    title: "Facility Management API"
+    description: "Facility Management API"
+    version: "1.0.0"
+servers:
+    - url: "{server}/v1"
+      variables:
+         server:
+             default: "https://api.example.com"
+paths:
+    /facility/{facility-id}:
+        parameters:
+            -   name: facility-id
+                style: simple
+                schema:
+                    type: string
+                description: "Should be a UUID in canonical form (four groups of hexadecimal characters)"
+                in: path
+                required: true
+            # TODO: Etag etc?
+        get:
+            responses:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/facility"
+                    headers:
+                        X-RateLimit-Limit:
+                            $ref: "#/components/headers/X-RateLimit-Limit"
+                        X-RateLimit-Remaining:
+                            $ref: "#/components/headers/X-RateLimit-Remaining"
+                        X-RateLimit-Reset:
+                            $ref: "#/components/headers/X-RateLimit-Reset"
+                "404":
+                    description: "Facility not found"
+                    headers:
+                        X-RateLimit-Limit:
+                            $ref: "#/components/headers/X-RateLimit-Limit"
+                        X-RateLimit-Remaining:
+                            $ref: "#/components/headers/X-RateLimit-Remaining"
+                        X-RateLimit-Reset:
+                            $ref: "#/components/headers/X-RateLimit-Reset"
+                "429":
+                    description: "Ratelimited. Please respect Retry-After"
+                    headers:
+                        X-RateLimit-Limit:
+                            $ref: "#/components/headers/X-RateLimit-Limit"
+                        X-RateLimit-Remaining:
+                            $ref: "#/components/headers/X-RateLimit-Remaining"
+                        X-RateLimit-Reset:
+                            $ref: "#/components/headers/X-RateLimit-Reset"
+                        Retry-After:
+                            $ref: "#/components/headers/Retry-After"
+        put:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/facility"
+            responses:
+                "204":
+                    description: "Updated successfully"
+                    headers:
+                        X-RateLimit-Limit:
+                            $ref: "#/components/headers/X-RateLimit-Limit"
+                        X-RateLimit-Remaining:
+                            $ref: "#/components/headers/X-RateLimit-Remaining"
+                        X-RateLimit-Reset:
+                            $ref: "#/components/headers/X-RateLimit-Reset"
+                "201":
+                    description: "Created successfully"
+                    headers:
+                        X-RateLimit-Limit:
+                            $ref: "#/components/headers/X-RateLimit-Limit"
+                        X-RateLimit-Remaining:
+                            $ref: "#/components/headers/X-RateLimit-Remaining"
+                        X-RateLimit-Reset:
+                            $ref: "#/components/headers/X-RateLimit-Reset"
+                "429":
+                    description: "Ratelimited. Please respect Retry-After"
+                    headers:
+                        X-RateLimit-Limit:
+                            $ref: "#/components/headers/X-RateLimit-Limit"
+                        X-RateLimit-Remaining:
+                            $ref: "#/components/headers/X-RateLimit-Remaining"
+                        X-RateLimit-Reset:
+                            $ref: "#/components/headers/X-RateLimit-Reset"
+                        Retry-After:
+                            $ref: "#/components/headers/Retry-After"
+        delete:
+            responses:
+                "204":
+                    description: "Deleted successfully"
+                    headers:
+                        X-RateLimit-Limit:
+                            $ref: "#/components/headers/X-RateLimit-Limit"
+                        X-RateLimit-Remaining:
+                            $ref: "#/components/headers/X-RateLimit-Remaining"
+                        X-RateLimit-Reset:
+                            $ref: "#/components/headers/X-RateLimit-Reset"
+                "404":
+                    description: "Facility not found"
+                    headers:
+                        X-RateLimit-Limit:
+                            $ref: "#/components/headers/X-RateLimit-Limit"
+                        X-RateLimit-Remaining:
+                            $ref: "#/components/headers/X-RateLimit-Remaining"
+                        X-RateLimit-Reset:
+                            $ref: "#/components/headers/X-RateLimit-Reset"
+                "429":
+                    description: "Ratelimited. Please respect Retry-After"
+                    headers:
+                        X-RateLimit-Limit:
+                            $ref: "#/components/headers/X-RateLimit-Limit"
+                        X-RateLimit-Remaining:
+                            $ref: "#/components/headers/X-RateLimit-Remaining"
+                        X-RateLimit-Reset:
+                            $ref: "#/components/headers/X-RateLimit-Reset"
+                        Retry-After:
+                            $ref: "#/components/headers/Retry-After"
+components:
+    headers:
+        X-RateLimit-Limit:
+            description: "The maximum requests between resets"
+            style: simple
+            required: true
+            schema:
+                type: number
+                format: int32
+        X-RateLimit-Remaining:
+            description: "The number of requests left until reset"
+            style: simple
+            required: true
+            schema:
+                type: number
+                format: int32
+        X-RateLimit-Reset:
+            description: "A UTC Timestamp (in seconds) that specifies the time of refilling a bucket."
+            style: simple
+            required: true
+            schema:
+                type: number
+                format: int32
+        Retry-After:
+            description: "Indicates how long the client should wait (in seconds) before making a follow-up request."
+            style: simple
+            required: true
+            schema:
+                type: number
+                format: int32
+    schemas:
+        facility:
+            type: object
+            properties:
+                name:
+                    type: string
+                contact-details:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/contact-details"
+                # TODO: Operating "calendar" via separate service?
+                location:
+                    $ref: "#/components/schemas/geo-location"
+        contact-details:
+            type: object
+            properties:
+                name:
+                    type: string
+                email:
+                    type: string
+                phone:
+                    type: string
+            required:
+                - name
+        geo-location:
+            type: object
+            properties:
+                lat:
+                    type: number
+                    format: double
+                lon:
+                    type: number
+                    format: double

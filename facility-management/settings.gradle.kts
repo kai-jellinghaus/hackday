@@ -1,3 +1,5 @@
+rootProject.name = "facility-management"
+
 pluginManagement {
     repositories {
         maven {
@@ -63,7 +65,6 @@ dependencyResolutionManagement {
 
 plugins {
     id("com.supcis.java-toolchain-resolver") version "0.0.1"
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
 toolchainManagement {
@@ -94,22 +95,3 @@ toolchainManagement {
         }
     }
 }
-
-// @formatter:off
-dependencyResolutionManagement {
-    versionCatalogs {
-        val log4jVersion = "2.23.0"
-        val kotlinVersion= "2.1.0"
-        create("thirdParty") {
-            bundle("all", listOf())
-        }
-        create("infrastruktur") {
-            plugin("version", "com.supcis.version").version("0.0.11")
-            plugin("publish", "com.supcis.publish").version("0.0.6")
-        }
-        create("thirdPartyTest") {
-            bundle("all", listOf())
-        }
-    }
-}
-// @formatter:on
