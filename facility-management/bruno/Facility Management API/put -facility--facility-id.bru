@@ -1,0 +1,32 @@
+meta {
+  name: put -facility--facility-id
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/facility/:facility-id
+  body: json
+  auth: none
+}
+
+params:path {
+  facility-id: 048b94fe-e890-408f-b833-ac67446437f3
+}
+
+body:json {
+  {
+    "name": "test",
+    "contact-details": [
+      {
+        "name": "Kai Jellinghaus",
+        "email": "kai.jellinghaus@sup-logistik.de",
+        "phone": null
+      }
+    ],
+    "location": {
+      "lat": "1.2341000",
+      "lon": "6.7890"
+    }
+  }
+}

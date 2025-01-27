@@ -1,0 +1,15 @@
+meta {
+  name: delete -facility--facility-id
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseUrl}}/facility/:facility-id
+  body: none
+  auth: none
+}
+
+params:path {
+  facility-id: 048b94fe-e890-408f-b833-ac67446437f3
+}
